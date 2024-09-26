@@ -78,8 +78,18 @@ func Update(idq string) Produto {
 		if err != nil {
 			panic(err.Error())
 		}
-		produtoToUp = Produto{Nome: nome, Desc: descricao, Preco: preco, Quantidade: quantidade}
+		produtoToUp = Produto{Id: id, Nome: nome, Desc: descricao, Preco: preco, Quantidade: quantidade}
 	}
 	return produtoToUp
 
+}
+
+func Alter(p Produto) {
+	dbs := db.DbConnect()
+	defer dbs.Close()
+	Alter, err := dbs.Prepare("update produtos set nome=$1, descricao=$2, preco=$3, quantidade=$4 where id=$5")
+	if err != nil {
+		panic(err.Error())
+	}
+	Alter.Exec(p.Nome, p.Desc, p.Preco, p.Quantidade, p.Id)
 }

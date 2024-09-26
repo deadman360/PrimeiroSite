@@ -12,4 +12,5 @@ func Router() {
 	http.HandleFunc("/insert", controller.Insert)
 	http.HandleFunc("/delete", controller.Delete)
 	http.HandleFunc("/update", controller.Update)
+	http.HandleFunc("/alter", controller.Alter)
 }

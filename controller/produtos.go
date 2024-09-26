@@ -37,13 +37,37 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", 301)
 }
 
-func Delete(w http.ResponseWriter, r *http.Request){
+func Delete(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	models.Delete(id)
 	http.Redirect(w, r, "/", 301)
 }
-func Update(w http.ResponseWriter, r *http.Request){
+func Update(w http.ResponseWriter, r *http.Request) {
 	idq := r.URL.Query().Get("id")
 	produto := models.Update(idq)
 	templ.ExecuteTemplate(w, "Update", produto)
+}
+
+func Alter(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		id := r.URL.Query().Get("id")
+		nome := r.FormValue("nome")
+		descricao := r.FormValue("descricao")
+		ids, err := strconv.Atoi(id)
+		if err != nil {
+			log.Println("Erro na conversão do id:", err.Error())
+		}
+		preco, err := strconv.ParseFloat(r.FormValue("preco"), 64)
+		if err != nil {
+			log.Println("Erro na conversão do preço:", err.Error())
+		}
+		quantidade, err := strconv.Atoi(r.FormValue("quantidade"))
+		if err != nil {
+			log.Println("Erro na conversão da descrição:", err.Error())
+		}
+		novoProduto := models.Produto{Id: ids, Nome: nome, Desc: descricao, Preco: preco, Quantidade: quantidade}
+		models.Alter(novoProduto)
+
+	}
+	http.Redirect(w, r, "/", 301)
 }
