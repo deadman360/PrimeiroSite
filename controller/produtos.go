@@ -36,3 +36,14 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, "/", 301)
 }
+
+func Delete(w http.ResponseWriter, r *http.Request){
+	id := r.URL.Query().Get("id")
+	models.Delete(id)
+	http.Redirect(w, r, "/", 301)
+}
+func Update(w http.ResponseWriter, r *http.Request){
+	idq := r.URL.Query().Get("id")
+	produto := models.Update(idq)
+	templ.ExecuteTemplate(w, "Update", produto)
+}
